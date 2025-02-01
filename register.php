@@ -20,7 +20,7 @@ if(isset($_POST["submit"])){
     $email=$_POST["email"];
     $password=$_POST["password"];
     $cpassword=$_POST["cpassword"];
-   
+    $user_type=$_POST["user_type"];
     
     $sql="SELECT *FROM user_form WHERE email='$email'"; 
     $result=mysqli_query($conn,$sql);
@@ -28,13 +28,13 @@ if(isset($_POST["submit"])){
         echo'user already exist!';
     }      
      else {
-        if($cpassword!==$password){
+        if($cpassword!=$password){
         echo"password missmatch";
         }
         else {
-     
+     $hashpword=password_hash($cpassword,PASSWORD_DEFAULT);
      $insert="INSERT INTO user_form(name,email,password,user_type)
-              VALUES('$name','$email','$password','$user_type')";
+              VALUES('$name','$email','$hashpword','$user_type')";
 
             mysqli_query($conn,$insert);
             header("Location:login.php");

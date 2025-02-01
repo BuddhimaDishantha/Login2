@@ -13,6 +13,24 @@ include("database.php");
     <div class="form-container">
         <form action="login.php" method="post">
             <h3>login now</h3>
+            <?php
+if(isset($_POST["submit"])){
+    $email=$_POST["email"];
+    $password=$_POST["password"];
+    $sql="SELECT*FROM user_form WHERE email='$email'";
+    $result=mysqli_query($conn,$sql);
+    if(mysqli_num_rows($result)>0){
+        $row=mysqli_fetch_assoc($result);
+        if(password_verify($password,$row["password"])){
+       header("Location:user.php");
+    }
+    else{
+        echo "Password incorrect";
+    }
+}
+
+}mysqli_close($conn);
+?>
            <input type="email" name="email" required placeholder="enter your email" > 
            <input type="password" name="password" required placeholder="enter your password" > 
             
@@ -24,13 +42,3 @@ include("database.php");
     </div>
 </body>
 </html>
-<?php
-if(isset($_POST["submit"])){
-    $email=$_POST["email"];
-    $password=$_POST["password"];
-    $sql="SELECT*FROM user_form WHERE email='$email' && password='$password'";
-    $result=mysqli_query($conn,$sql);
-    if(mysqli_num_rows($result)>0){
-       header("Location:user.php");
-    }
-}
